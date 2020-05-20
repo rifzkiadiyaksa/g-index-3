@@ -1,69 +1,25 @@
 var authConfig = {
-  siteName: 'Glory to Heaven', // WebSite Name
+  siteName: 'Glory to Heaven',
   version: '1.0', 
   theme: 'material',
   main_color: 'red', // red | pink | purple | deep-purple | indigo | blue | light-blue | cyan | teal | green | light-green | lime yellow | amber orange | deep-orange | brown | greyblue-grey
   accent_color: 'teal', // red | pink | purple | deep-purple | indigo | blue | light-blue | cyan | teal | green | light-green | lime | yellow | amber | orange | deep-orange
   dark_theme: true, // true for dark theme
-  client_id: '',
-  client_secret: '',
-  refresh_token: '', // Refresh token
-
-  /**
-   * Set up multiple Drives to display; add multiples by format
-   * [id] can be team disk id, subfolder id, or "root" (representing the root directory of personal disk);
-   * [name] The displayed name
-   * [user] Basic Auth username
-   * [pass] Basic Auth password
-   * Basic Auth of each disk can be set separately. Basic Auth takes effect on all paths under the disk, including subfolders, file chains on the disk, etc.
-   * No need for Basic Auth disk, just keep user and pass empty at the same time. (No need to set it directly)
-   * [Note] For the disk whose id is set to the subfolder id, the search function will not be supported (it does not affect other disks)
-   */
-  // It is possible to set only the password, only the user name, and the user name and password at the same time
+  client_id: 'client_id',
+  client_secret: 'client_secret',
+  refresh_token: 'refresh_token', // Refresh token
   roots: [
     {
-      id: '',
-      name: 'Sample1',
-      user: 'admin',
-      pass: ''
-    },
-    {
-      id: 'drive_id',
-      name: 'Sample2',
-      user: 'admin2',
-      pass: 'index'
-    },
-    {
       id: 'folder_id',
-      name: 'Sample3',
-      user: 'admin3',
-      pass: 'index2'
-    }
+      name: 'Glory to Heaven',
+      user: 'username',
+      pass: 'password'
+    },
   ],
-  /**
-   * The number displayed on each page of the file list page. [Recommended setting value is between 100 and 1000];
-    * If the setting is greater than 1000, it will cause an error when requesting drive api;
-    * If the set value is too small, the incremental loading (page loading) of the scroll bar of the file list page will be invalid
-    * Another effect of this value is that if the number of files in the directory is greater than this setting (that is, multiple pages need to be displayed), the results of the first listing directory will be cached.
-   */
   files_list_page_size: 500,
-  /**
-   * The number displayed on each page of the search results page. [Recommended setting value is between 50 and 1000];
-    * If the setting is greater than 1000, it will cause an error when requesting drive api;
-    * If the set value is too small, it will cause the incremental loading (page loading) of the scroll bar of the search results page to fail;
-    * The size of this value affects the response speed of the search operation
-   */
   search_result_list_page_size: 50,
-  // Confirm that cors can be opened
   enable_cors_file_down: false,
-  // user_drive_real_root_id
-  /**
-    * The above basic auth already contains the function of global protection in the disk. So by default, the password in the .password file is no longer authenticated;
-    * If you still need to verify the password in the .password file for certain directories based on global authentication, set this option to true;
-    * [Note] If the password verification of the .password file is enabled, the overhead of querying whether the .password file in the directory will be added each time the directory is listed.
-  */
-  
-  "enable_password_file_verify": false
+  "enable_password_file_verify": true
   
 };
 
@@ -118,7 +74,7 @@ function html(current_drive_order = 0, model = {}) {
     window.current_drive_order = ${current_drive_order};
   </script>
   <script>var main_color = "${authConfig.main_color}";var accent_color = "${authConfig.accent_color}";var dark = ${authConfig.dark_theme};</script>
-  <script src="//cdn.jsdelivr.net/combine/gh/jquery/jquery@3.2/dist/jquery.min.js,gh/K-E-N-W-A-Y/GD-Index-Dark@1.0/Search/themes/material/app.js"></script>
+  <script src="//cdn.jsdelivr.net/combine/gh/jquery/jquery@3.2/dist/jquery.min.js,gh/tks18/g-index-3@master/Search/themes/material/app.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/mdui/0.4.3/js/mdui.min.js"></script>
 </head>
 <body>
