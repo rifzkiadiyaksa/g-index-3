@@ -1,4 +1,4 @@
-# Google Drive Index + Guide + Team Drive Maker [If you have G-suite Account]
+# Google Drive Index
 
 [Here's the Website](https://glorytoheaven.tk)
 
