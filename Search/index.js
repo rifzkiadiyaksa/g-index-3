@@ -1,13 +1,10 @@
 var authConfig = {
-  siteName: 'GD-Index-Dark', // WebSite Name
-  version: '1.0', // VersionControl, do not modify manually
-  // Only material!
-  theme: 'material', // material  classic
-   //add themes color, darkmode
-  main_color: '', // red | pink | purple | deep-purple | indigo | blue | light-blue | cyan | teal | green | light-green | lime yellow | amber orange | deep-orange | brown | greyblue-grey
-  accent_color: '', // red | pink | purple | deep-purple | indigo | blue | light-blue | cyan | teal | green | light-green | lime | yellow | amber | orange | deep-orange
+  siteName: 'Glory to Heaven', // WebSite Name
+  version: '1.0', 
+  theme: 'material',
+  main_color: 'red', // red | pink | purple | deep-purple | indigo | blue | light-blue | cyan | teal | green | light-green | lime yellow | amber orange | deep-orange | brown | greyblue-grey
+  accent_color: 'teal', // red | pink | purple | deep-purple | indigo | blue | light-blue | cyan | teal | green | light-green | lime | yellow | amber | orange | deep-orange
   dark_theme: true, // true for dark theme
-  // client_id & client_secret - PLEASE USE YOUR OWN!
   client_id: '',
   client_secret: '',
   refresh_token: '', // Refresh token
