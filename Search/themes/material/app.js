@@ -1,6 +1,5 @@
 // Load the necessary static in the head
 document.write('<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/mdui@0.4.3/dist/css/mdui.min.css">');
-document.write('<script src="https://cdn.plyr.io/3.6.2/plyr.polyfilled.js"></script>')
 document.write('<link rel="stylesheet" href="https://cdn.plyr.io/3.6.2/plyr.css" />')
 document.write('<link rel="icon" href="https://raw.githubusercontent.com/tks18/educate-infozy/master/favicon.ico">')
 // markdown Standby
@@ -756,6 +755,7 @@ function copyToClipboard(str) {
 // Document display video |mp4|webm|avi|
 function file_video(path) {
  const url = window.location.origin + path;
+ var suburl = path.split("/").pop().substr(0, text.lastIndexOf(".")).split(".").shift() + ".srt";
   let player_items = [
     {
       text: 'MXPlayer(Free)',
@@ -802,6 +802,7 @@ function file_video(path) {
 	<br>
 	<video autoplay id="videoplayer" playsinline class="mdui-video-fluid mdui-center" preload controls>
 	  <source src="${url}" type="video/mp4">
+    <track kind="captions" label="English captions" src="${suburl}" srclang="en" default />
 	</video>
 	<br>${playBtn}
 	<!-- Fixed label -->
