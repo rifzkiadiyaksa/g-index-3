@@ -1,5 +1,7 @@
 // Load the necessary static in the head
 document.write('<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/mdui@0.4.3/dist/css/mdui.min.css">');
+document.write('<script src="https://cdn.plyr.io/3.6.2/plyr.polyfilled.js"></script>')
+document.write('<link rel="stylesheet" href="https://cdn.plyr.io/3.6.2/plyr.css" />')
 document.write('<link rel="icon" href="https://raw.githubusercontent.com/tks18/educate-infozy/master/favicon.ico">')
 // markdown Standby
 document.write('<script src="//cdn.jsdelivr.net/npm/markdown-it@10.0.0/dist/markdown-it.min.js"></script>');
@@ -787,12 +789,19 @@ function file_video(path) {
       </button>
       
       <ul class="mdui-menu" id="player-items">${player_items}</ul>`;
-
+  const player = new Plyr('#videoplayer', {
+    "controls": ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'pip', 'airplay', 'fullscreen'],
+    "settings": ['captions', 'quality', 'speed', 'loop'],
+    "loadSprite": true,
+    "seekTime": 5,
+    "clickToPlay": true,
+    "hideControls": true
+  });
   const content = `
   
 <div class="mdui-container-fluid">
 	<br>
-	<video class="mdui-video-fluid mdui-center" preload controls>
+	<video autoplay id="videoplayer" playsinline class="mdui-video-fluid mdui-center" preload controls>
 	  <source src="${url}" type="video/mp4">
 	</video>
 	<br>${playBtn}
@@ -818,10 +827,11 @@ function file_video(path) {
 // File display Audio |mp3|flac|m4a|wav|ogg|
 function file_audio(path) {
   var url = window.location.origin + path;
+  const player = new Plyr('#audioplayer');
   var content = `
 <div class="mdui-container-fluid">
 	<br>
-	<audio class="mdui-center" preload controls>
+	<audio autoplay id="audioplayer" class="mdui-center" preload controls>
 	  <source src="${url}"">
 	</audio>
 	<br>
