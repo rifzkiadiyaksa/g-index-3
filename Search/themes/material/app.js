@@ -13,7 +13,7 @@ if (UI.dark_mode) {
 // Initialize the page and load the necessary resources
 function init(){
     document.siteName = $('title').html();
-    $('body').addClass("mdui-theme-primary-"+main_color+" mdui-theme-accent-"+accent_color);
+    $('body').addClass(`mdui-theme-primary-${UI.main_color} mdui-theme-accent-${UI.accent_color}`);
     var html = "";
     html += `
     <header class="mdui-appbar mdui-color-theme">`
