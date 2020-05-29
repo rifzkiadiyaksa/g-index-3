@@ -78,6 +78,8 @@ function html(current_drive_order = 0, model = {}) {
   </script>
   <script src="//cdn.jsdelivr.net/combine/gh/jquery/jquery@3.2/dist/jquery.min.js,gh/tks18/g-index-3@master/Search/themes/material/app.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/mdui/0.4.3/js/mdui.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/tks18/g-index-3@master/Search/themes/material/sub.js"></script>
+  <script src="https://cdn.plyr.io/3.6.2/plyr.polyfilled.js"></script>
 </head>
 <body>
 </body>
