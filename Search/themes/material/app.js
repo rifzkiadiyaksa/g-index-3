@@ -1,12 +1,15 @@
 // Load the necessary static in the head
 document.write('<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/mdui@0.4.3/dist/css/mdui.min.css">');
-document.write('<link rel="stylesheet" href="https://cdn.plyr.io/3.6.2/plyr.css" />')
-document.write('<link rel="icon" href="https://raw.githubusercontent.com/tks18/educate-infozy/master/favicon.ico">')
+document.write('<link rel="stylesheet" href="https://cdn.plyr.io/3.6.2/plyr.css" />');
+document.write('<script src="https://cdn.plyr.io/3.6.2/plyr.js"></script>');
+document.write('<script src="https://cdn.jsdelivr.net/gh/tks18/g-index-3@master/Search/themes/material/sub.js"></script>');
+document.write('<link rel="icon" href="https://raw.githubusercontent.com/tks18/educate-infozy/master/favicon.ico">');
 // markdown Standby
 document.write('<script src="//cdn.jsdelivr.net/npm/markdown-it@10.0.0/dist/markdown-it.min.js"></script>');
 document.write('<style>.mdui-appbar .mdui-toolbar{height:56px;font-size:1pc}.mdui-toolbar>*{padding:0 6px;margin:0 2px}.mdui-toolbar>i{opacity:.5}.mdui-toolbar>.mdui-typo-headline{padding:0 1pc 0 0}.mdui-toolbar>i{padding:0}.mdui-toolbar>a:hover,a.active,a.mdui-typo-headline{opacity:1}.mdui-container{max-width:980px}.mdui-list-item{transition:none}.mdui-list>.th{background-color:initial}.mdui-list-item>a{width:100%;line-height:3pc}.mdui-list-item{margin:2px 0;padding:0}.mdui-toolbar>a:last-child{opacity:1}@media screen and (max-width:980px){.mdui-list-item .mdui-col-sm-3{display:none}.mdui-container{width:100%!important;margin:0}.mdui-toolbar>.mdui-typo-headline,.mdui-toolbar>a:last-child,.mdui-toolbar>i:first-child{display:block}}</style>');
-if(dark){document.write('<style>* {box-sizing: border-box}body{color:rgba(255,255,255,.87);background-color:#333232}.mdui-theme-primary-'+main_color+' .mdui-color-theme{background-color:#232427!important}</style>');}
-
+if (UI.dark_mode) {
+  document.write(`<style>* {box-sizing: border-box}body{color:rgba(255,255,255,.87);background-color:#333232}.mdui-theme-primary-${UI.main_color} .mdui-color-theme{background-color:#232427!important}</style>`);
+}
 // Initialize the page and load the necessary resources
 function init(){
     document.siteName = $('title').html();
@@ -14,7 +17,7 @@ function init(){
     var html = "";
     html += `
     <header class="mdui-appbar mdui-color-theme">`
-    if(dark){
+    if(UI.dark_mode){
         html += `
         <div id="nav" class="mdui-toolbar mdui-container mdui-text-color-white-text">
         </div>`;
@@ -25,7 +28,7 @@ function init(){
     }
 html += `
     </header>
-        <div id="content" class="mdui-container"> 
+        <div id="content" class="mdui-container">
         </div>`;
     $('body').html(html);
 }
@@ -344,7 +347,7 @@ function append_files_to_list(path, files) {
     item['size'] = formatFileSize(item['size']);
     if (item['mimeType'] == 'application/vnd.google-apps.folder') {
       html += `<li class="mdui-list-item mdui-ripple"><a href="${p}" class="folder">
-	            <div class="mdui-col-xs-12 mdui-col-sm-7 mdui-text-truncate">
+	            <div class="mdui-col-xs-12 mdui-col-sm-7 mdui-text-truncate" title="${item.name}">
 	            <i class="mdui-icon material-icons">folder_open</i>
 	              ${item.name}
 	            </div>
@@ -374,7 +377,7 @@ function append_files_to_list(path, files) {
         c += " view";
       }
       html += `<li class="mdui-list-item file mdui-ripple" target="_blank"><a gd-type="${item.mimeType}" href="${p}" class="${c}">
-	          <div class="mdui-col-xs-12 mdui-col-sm-7 mdui-text-truncate">
+	          <div class="mdui-col-xs-12 mdui-col-sm-7 mdui-text-truncate" title="${item.name}">
 	          <i class="mdui-icon material-icons">insert_drive_file</i>
 	            ${item.name}
 	          </div>
@@ -561,7 +564,7 @@ function append_search_result_to_list(files) {
     item['size'] = formatFileSize(item['size']);
     if (item['mimeType'] == 'application/vnd.google-apps.folder') {
       html += `<li class="mdui-list-item mdui-ripple"><a id="${item['id']}" onclick="onSearchResultItemClick(this)" class="folder">
-	            <div class="mdui-col-xs-12 mdui-col-sm-7 mdui-text-truncate">
+	            <div class="mdui-col-xs-12 mdui-col-sm-7 mdui-text-truncate" title="${item.name}">
 	            <i class="mdui-icon material-icons">folder_open</i>
 	              ${item.name}
 	            </div>
@@ -576,7 +579,7 @@ function append_search_result_to_list(files) {
         c += " view";
       }
       html += `<li class="mdui-list-item file mdui-ripple" target="_blank"><a id="${item['id']}" gd-type="${item.mimeType}" onclick="onSearchResultItemClick(this)" class="${c}">
-	          <div class="mdui-col-xs-12 mdui-col-sm-7 mdui-text-truncate">
+	          <div class="mdui-col-xs-12 mdui-col-sm-7 mdui-text-truncate" title="${item.name}">
 	          <i class="mdui-icon material-icons">insert_drive_file</i>
 	            ${item.name}
 	          </div>
@@ -786,21 +789,21 @@ function file_video(path) {
       <button class="mdui-btn mdui-ripple mdui-color-theme-accent" mdui-menu="{target:'#player-items'}">
         <i class="mdui-icon material-icons">&#xe039;</i>Play From External Player<i class="mdui-icon material-icons">&#xe5cf;</i>
       </button>
-      
+
       <ul class="mdui-menu" id="player-items">${player_items}</ul>`;
-  const player = new Plyr('#videoplayer', {
-    "controls": ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'pip', 'airplay', 'fullscreen'],
-    "settings": ['captions', 'quality', 'speed', 'loop'],
-    "loadSprite": true,
-    "seekTime": 5,
-    "clickToPlay": true,
-    "hideControls": true
+  const player = new Plyr('#player', {
+    controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'pip', 'airplay', 'fullscreen'],
+    settings: ['captions', 'quality', 'speed', 'loop'],
+    loadSprite: true,
+    seekTime: 5,
+    clickToPlay: true,
+    hideControls: true
   });
   const content = `
-  
+
 <div class="mdui-container-fluid">
 	<br>
-	<video autoplay id="videoplayer" playsinline class="mdui-video-fluid mdui-center" preload controls>
+	<video autoplay id="player" playsinline class="mdui-video-fluid mdui-center" preload controls>
 	  <source src="${url}" type="video/mp4">
     <track kind="captions" label="English captions" src="${suburl}" srclang="en" default />
 	</video>
@@ -827,11 +830,10 @@ function file_video(path) {
 // File display Audio |mp3|flac|m4a|wav|ogg|
 function file_audio(path) {
   var url = window.location.origin + path;
-  const player = new Plyr('#audioplayer');
   var content = `
 <div class="mdui-container-fluid">
 	<br>
-	<audio autoplay id="audioplayer" class="mdui-center" preload controls>
+	<audio class="mdui-center" preload controls>
 	  <source src="${url}"">
 	</audio>
 	<br>

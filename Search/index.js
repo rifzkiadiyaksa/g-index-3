@@ -1,26 +1,29 @@
 var authConfig = {
-  siteName: 'Glory to Heaven',
-  version: '1.0', 
-  theme: 'material',
-  main_color: 'red', // red | pink | purple | deep-purple | indigo | blue | light-blue | cyan | teal | green | light-green | lime yellow | amber orange | deep-orange | brown | greyblue-grey
-  accent_color: 'teal', // red | pink | purple | deep-purple | indigo | blue | light-blue | cyan | teal | green | light-green | lime | yellow | amber | orange | deep-orange
-  dark_theme: true, // true for dark theme
-  client_id: 'client_id',
-  client_secret: 'client_secret',
-  refresh_token: 'refresh_token', // Refresh token
-  roots: [
+  "siteName": 'Glory to Heaven',
+  "version": '1.0',
+  "client_id": 'client_id',
+  "client_secret": 'client_secret',
+  "refresh_token": 'refresh_token', // Refresh token
+  "roots": [
     {
       id: 'folder_id',
       name: 'Glory to Heaven',
       user: 'username',
-      pass: 'password'
+      pass: 'password',
+      protect_file_link: true
     },
   ],
-  files_list_page_size: 500,
-  search_result_list_page_size: 50,
-  enable_cors_file_down: false,
+  "files_list_page_size": 500,
+  "search_result_list_page_size": 50,
+  "enable_cors_file_down": false,
   "enable_password_file_verify": true
-  
+  const uiConfig = {
+    "theme": "material", // DO NOT set it to classic
+    "dark_mode": true,
+    "main_color": 'red', // red | pink | purple | deep-purple | indigo | blue | light-blue | cyan | teal | green | light-green | lime yellow | amber orange | deep-orange | brown | greyblue-grey
+    "accent_color": 'teal', // red | pink | purple | deep-purple | indigo | blue | light-blue | cyan | teal | green | light-green | lime | yellow | amber | orange | deep-orange
+    "fluid_navigation_bar": true,
+  };
 };
 
 
@@ -39,7 +42,6 @@ const FUNCS = {
       .replace(/[,，|(){}]/g, space)
       .trim()
   }
-
 };
 
 /**
@@ -72,12 +74,10 @@ function html(current_drive_order = 0, model = {}) {
     window.drive_names = JSON.parse('${JSON.stringify(authConfig.roots.map(it => it.name))}');
     window.MODEL = JSON.parse('${JSON.stringify(model)}');
     window.current_drive_order = ${current_drive_order};
+    window.UI = JSON.parse('${JSON.stringify(uiConfig)}');
   </script>
-  <script>var main_color = "${authConfig.main_color}";var accent_color = "${authConfig.accent_color}";var dark = ${authConfig.dark_theme};</script>
   <script src="//cdn.jsdelivr.net/combine/gh/jquery/jquery@3.2/dist/jquery.min.js,gh/tks18/g-index-3@master/Search/themes/material/app.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/mdui/0.4.3/js/mdui.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/tks18/g-index-3@master/Search/themes/material/sub.js"></script>
-  <script src="https://cdn.plyr.io/3.6.2/plyr.polyfilled.js"></script>
 </head>
 <body>
 </body>
@@ -141,6 +141,7 @@ async function handleRequest(request) {
     } else {
       return redirectToIndexPage()
     }
+    for (const r = gd.basicAuthResponse(request); r;) return r;
     const command = match.groups.command;
     // Search
     if (command === 'search') {
@@ -181,29 +182,30 @@ async function handleRequest(request) {
   } catch (e) {
     return redirectToIndexPage()
   }
-  
+
  // basic auth
-  for (const r = gd.basicAuthResponse(request); r;) return r;
-  
+    const basic_auth_res = gd.basicAuthResponse(request);
+
   path = path.replace(gd.url_path_prefix, '') || '/';
   if (request.method == 'POST') {
-    return apiRequest(request, gd);
+    return basic_auth_res || apiRequest(request, gd);
   }
 
   let action = url.searchParams.get('a');
 
   if (path.substr(-1) == '/' || action != null) {
-    return new Response(html(gd.order, {root_type: gd.root_type}), {
+    return basic_auth_res || new Response(html(gd.order, {root_type: gd.root_type}), {
       status: 200,
       headers: {'Content-Type': 'text/html; charset=utf-8'}
     });
   } else {
     if (path.split('/').pop().toLowerCase() == ".password") {
-      return new Response("", {status: 404});
+      return basic_auth_res || new Response("", {status: 404});
     }
     let file = await gd.file(path);
     let range = request.headers.get('Range');
     const inline_down = 'true' === url.searchParams.get('inline');
+    if (gd.root.protect_file_link && basic_auth_res) return basic_auth_res;
     return gd.down(file.id, range, inline_down);
   }
 }
@@ -267,6 +269,7 @@ class googleDrive {
     // Each disk corresponds to an order, corresponding to a gd instance
     this.order = order;
     this.root = authConfig.roots[order];
+    this.root.protect_file_link = this.root.protect_file_link || false;
     this.url_path_prefix = `/${order}:`;
     this.authConfig = authConfig;
     // TODO: The invalid refresh strategy of these caches can be formulated later
@@ -346,7 +349,7 @@ class googleDrive {
     } else return null;
     return _401;
   }
-  
+
   async down(id, range = '', inline = false) {
     let url = `https://www.googleapis.com/drive/v3/files/${id}?alt=media`;
     let requestOption = await this.requestOption();
