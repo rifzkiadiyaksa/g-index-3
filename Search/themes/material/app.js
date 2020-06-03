@@ -822,7 +822,7 @@ function file_audio(path) {
 <div class="mdui-container-fluid">
 	<br>
 	<audio autoplay class="mdui-center" preload controls>
-	  <source src="${url}"">
+	  <source src="${url}" type="audio/mp3">
 	</audio>
 	<br>
 	<!-- Fixed label -->
